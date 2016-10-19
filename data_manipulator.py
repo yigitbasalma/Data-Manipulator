@@ -43,7 +43,7 @@ def main():
 	parser = argparse.ArgumentParser(description="Manupulate sensitive data (eg: Credit Card Number etc.)", fromfile_prefix_chars="@")
 	parser.add_argument("--single-file", dest="single_file", action="store", help="Single file for manipulate.")
 	parser.add_argument("--multi-file", dest="multi_file", action="store", nargs="*", help="Multi file for manipulate.")
-	parser.add_argument("--path", dest="dir_path", action="store", help="Manipulate for all files in directory.'Must be @ prefix'")
+	parser.add_argument("--from-dir", dest="dir_path", action="store", help="Manipulate for all files in directory.'Must be @ prefix'")
 	parser.add_argument("-z", dest="compression", action="store",\
 		 choices=["zip","rar","tar","tar.gz","bz"], help="File compression status and type.")
 	parser.add_argument("--type", default="card_number" , dest="types", action="store",\
