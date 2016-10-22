@@ -116,7 +116,7 @@ def main():
 	parser.add_argument("--multi-file", dest="multi_file", action="store", nargs="*", help="Multi file for manipulate.")
 	parser.add_argument("--from-dir", dest="dir_path", action="store", help="Manipulate for all files in directory.'Must be @ prefix'")
 	parser.add_argument("-z", dest="compression", action="store",\
-		 choices=["zip","rar","tar","tar.gz","bz"], help="File compression status and type.")
+		 choices=["zip","tar","tar.gz"], help="File compression status and type.")
 	parser.add_argument("--tmp-path", dest="tmp_path", action="store", help="Files open on the path.This option must be set if -z option is set")
 	parser.add_argument("--compress-path", dest="compress_path", action="store",\
 		 help="Files zip and put on the path.This option must be set if -z option is set")
