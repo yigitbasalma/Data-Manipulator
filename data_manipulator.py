@@ -25,9 +25,10 @@ def unpack(_file, path):
 				for i in _files:
 					paths.append(os.path.join(_dir, i))
 		os.unlink(_file)
-		return (False, paths, e, _file)
+		file_name = _file.split("/")[-1]
+		return (False, paths, e, file_name)
 	except:
-		return (True, None, None, _file)
+		return (True, None, None, file_name)
 def pack(_file, ext, compress_path, fname, tmp_dir):
 	files = " ".join(_file)
 	if ext == "zip":
@@ -180,22 +181,15 @@ def main():
                         print "%s is not a regular file." % args.single_file
                         sys.exit(6)
 		if args.compression:
-			msgs = []
 			f_paths, ext, fname = is_compressed(args.single_file, compressed=True, tmp_path=args.tmp_path)
 			if ext is not None:
 				for i in f_paths:
 					exit_code, msg = file_manipulator(i, regexps[args.types], args.character)
-					msgs.append(msg)
 				pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
-			else:
-				exit_code, msg = file_manipulator(args.single_file, regexps[args.types], args.character)
-				msgs.append(msg)
-			print "\n".join(msgs)
 			sys.exit(exit_code)
-		else:
-			exit_code, msg = file_manipulator(args.single_file, regexps[args.types], args.character)
-			print msg
-			sys.exit(exit_code)
+
+		exit_code, msg = file_manipulator(args.single_file, regexps[args.types], args.character)
+		sys.exit(exit_code)
 	elif args.multi_file:
 		if not args.compression and is_compressed(args.multi_file, multiple=True):
 			print "This files are compressed.Please use -z and --tmp-path option."
@@ -208,21 +202,15 @@ def main():
 				print "%s is not a regular file." % i
 				sys.exit(6)
 		if args.compression:
-			msgs = []
 			for i in args.multi_file:
 				f_paths, ext, fname = is_compressed(i, compressed=True, tmp_path=args.tmp_path, multiple=True)
 				if ext is not None:
 					exit_code, msg = file_manipulator(f_paths, regexps[args.types], args.character, multiple=True)
-					msgs.append(msg)
 					pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
-				elif ext is None:
-					exit_code, msg = file_manipulator(i, regexps[args.types], args.character, multiple=True)
-					msgs.append(msg)
 				time.sleep(0.1)
 			sys.exit(exit_code)
 		
 		exit_code, msg = file_manipulator(args.multi_file, regexps[args.types], args.character, multiple=True)
-		print msg
 		sys.exit(exit_code)
 	elif args.dir_path:
 		if not os.path.exists(args.dir_path):
@@ -236,22 +224,16 @@ def main():
 			print "This files are compressed.Please use -z and --tmp-path option."
 			sys.exit(4)
 		if args.compression:
-			msgs = []
                         for i in files:
 				f_paths, ext, fname = is_compressed(i, compressed=True, tmp_path=args.tmp_path, multiple=True)
 				if ext is not None:
 					exit_code, msg = file_manipulator(f_paths, regexps[args.types], args.character, multiple=True)
-					msgs.append(msg)
 					pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
-				elif ext is None:
-					exit_code, msg = file_manipulator(i, regexps[args.types], args.character, multiple=True)
-					msgs.append(msg)
 				time.sleep(0.1)
 			sys.exit(exit_code)
 
 		for i in files:
 			exit_code, msg = file_manipulator(i, regexps[args.types], args.character, multiple=True)
-			print msg
 			sys.exit(exit_code)
 
 if __name__ == "__main__":
