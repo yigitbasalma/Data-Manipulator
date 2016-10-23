@@ -28,7 +28,7 @@ def unpack(_file, path):
 		return (False, paths, e, _file)
 	except:
 		return (True, None, None, _file)
-def pack(_file, ext, compress_path, fname):
+def pack(_file, ext, compress_path, fname, tmp_dir):
 	files = " ".join(_file)
 	if ext == "zip":
 		cmd = "zip -j -rm {0} {1}".format(os.path.join(compress_path, fname), files)
@@ -42,6 +42,11 @@ def pack(_file, ext, compress_path, fname):
 		cmd = None
 	if cmd is not None:
 		Popen([cmd], stdout=PIPE, stderr=PIPE, shell=True)
+		while True:
+			if len(os.listdir(tmp_dir)) == 0:
+				break
+			else:
+				time.sleep(0.1)
 		return True
 	else:
 		return False
@@ -181,7 +186,7 @@ def main():
 				for i in f_paths:
 					exit_code, msg = file_manipulator(i, regexps[args.types], args.character)
 					msgs.append(msg)
-				pack(f_paths, ext, args.compress_path, fname)
+				pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
 			else:
 				exit_code, msg = file_manipulator(args.single_file, regexps[args.types], args.character)
 				msgs.append(msg)
@@ -209,7 +214,7 @@ def main():
 				if ext is not None:
 					exit_code, msg = file_manipulator(f_paths, regexps[args.types], args.character, multiple=True)
 					msgs.append(msg)
-					pack(f_paths, ext, args.compress_path, fname)
+					pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
 				elif ext is None:
 					exit_code, msg = file_manipulator(i, regexps[args.types], args.character, multiple=True)
 					msgs.append(msg)
@@ -237,7 +242,7 @@ def main():
 				if ext is not None:
 					exit_code, msg = file_manipulator(f_paths, regexps[args.types], args.character, multiple=True)
 					msgs.append(msg)
-					pack(f_paths, ext, args.compress_path, fname)
+					pack(f_paths, ext, args.compress_path, fname, args.tmp_path)
 				elif ext is None:
 					exit_code, msg = file_manipulator(i, regexps[args.types], args.character, multiple=True)
 					msgs.append(msg)
