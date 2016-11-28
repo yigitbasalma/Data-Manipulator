@@ -89,7 +89,7 @@ def file_manipulator(file_name, reg, mask, multiple=False):
 					print "{0}: {1} (File => {2})".format(k,t[1], file_name)
 			print "*" * 30
 			target.seek(0)
-			target.write(t)
+			target.write(t[0])
 			target.truncate()
 		return (0, "Done")
 	elif multiple:
@@ -99,14 +99,16 @@ def file_manipulator(file_name, reg, mask, multiple=False):
 				print "*" * 30
 				for k,v in reg.iteritems():
 					try:
-						print "{0}: {1} (File => {2})".format(k,len(v.findall(t)), files)
-						t = v.sub(mask * 16, t)
+						#print "{0}: {1} (File => {2})".format(k,len(v.findall(t)), files)
+						t = v.subn(mask * 16, t)
+						print "{0}: {1} (File => {2})".format(k,t[1], file_name)
 					except:
-						print "{0}: {1} (File => {2})".format(k,len(v.findall(t)), files)
+						#print "{0}: {1} (File => {2})".format(k,len(v.findall(t)), files)
+						print "{0}: {1} (File => {2})".format(k,t[1], file_name)
 				print "*" * 30
 				print "\n"
 				target.seek(0)
-				target.write(t)
+				target.write(t[0])
 				target.truncate()
 		return (0, "Done")
 
